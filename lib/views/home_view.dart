@@ -30,18 +30,20 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsetsDirectional.only(
-            start: 20.0,
-            end: 20.0,
-            top: 20.0,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(
+          start: 20.0,
+          end: 20.0,
+          top: 20.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: 40,
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
@@ -62,7 +64,10 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ],
               ),
-              FutureBuilder(
+            ),
+            SizedBox(
+              height: 40,
+              child: FutureBuilder(
                 future: user,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -79,17 +84,23 @@ class _HomeViewState extends State<HomeView> {
                   );
                 },
               ),
-              SvgPicture.asset(
+            ),
+            SizedBox(
+              height: 400,
+              child: SvgPicture.asset(
                 'assets/imgs/qr.svg',
               ),
-              Center(
-                  child: Container(
-                margin: EdgeInsetsDirectional.only(bottom: 25),
-                height: 2,
-                width: 250,
-                color: Colors.black,
-              )),
-              FutureBuilder(
+            ),
+            Center(
+                child: Container(
+              margin: EdgeInsetsDirectional.only(bottom: 25),
+              height: 2,
+              width: 250,
+              color: Colors.black,
+            )),
+            SizedBox(
+              height: 100,
+              child: FutureBuilder(
                 future: links,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -182,8 +193,11 @@ class _HomeViewState extends State<HomeView> {
                   );
                 },
               ),
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 20,
+            )
+          ],
         ),
       ),
     );

@@ -54,7 +54,6 @@ class _SearchViewState extends State<SearchView> {
       if (mounted) {
         if (isfollowed == true) {
           setState(() {
-            print('object');
             followedText = 'Followed';
             followedColorBackground = Colors.white;
             followedColorfont = Colors.black;
@@ -258,13 +257,19 @@ class _SearchViewState extends State<SearchView> {
                                                           FontWeight.w700,
                                                     ),
                                                   ),
-                                                  Text(
-                                                    user.links![index].link!,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                  SizedBox(
+                                                    width: 220,
+                                                    child: Text(
+                                                      user.links![index].link!,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],

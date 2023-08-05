@@ -43,3 +43,17 @@ Future<bool> addLink(Map<String, String> body) async {
     throw Exception('Failed to add link');
   }
 }
+
+Future<bool> updateLinkCont(Map<String, String> body, int linkId) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  User user = userFromJson(prefs.getString('user')!);
+  final response = await http.put(Uri.parse('$linksUrl/$linkId'),
+      body: body, headers: {'Authorization': 'Bearer ${user.token}'});
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    throw Exception('Failed to update link');
+  }
+}

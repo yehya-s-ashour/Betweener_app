@@ -14,7 +14,10 @@ Future<bool> addUserCont(Map<String, String> body) async {
   if (response.statusCode == 200) {
     // final parsedJson = json.decode(response.body);
     // return parsedJson['followee']['user'];
+
     return true;
+  } else if (response.statusCode == 500) {
+    return false;
   } else {
     throw Exception('Failed add user');
   }

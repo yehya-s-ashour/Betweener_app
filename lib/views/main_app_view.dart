@@ -25,6 +25,7 @@ class _MainAppViewState extends State<MainAppView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: screensList[_currentIndex],
       extendBody: true,
       bottomNavigationBar: CustomFloatingNavBar(

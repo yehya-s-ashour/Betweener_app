@@ -475,8 +475,8 @@ class _ProfileViewState extends State<ProfileView> {
                         child: ListView.separated(
                           physics: BouncingScrollPhysics(),
                           padding: EdgeInsetsDirectional.only(
-                            start: 60,
-                            end: 60,
+                            start: 40,
+                            end: 40,
                             top: 40,
                           ),
                           scrollDirection: Axis.vertical,
@@ -488,26 +488,124 @@ class _ProfileViewState extends State<ProfileView> {
                                 endActionPane: ActionPane(
                                   motion: const DrawerMotion(),
                                   children: [
-                                    SlidableAction(
+                                    CustomSlidableAction(
                                       onPressed: (context) {
-                                        deleteLink(id!);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                            'Deleted Successfully',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          backgroundColor: Colors.redAccent,
-                                          duration: Duration(seconds: 2),
-                                        ));
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              backgroundColor: kPrimaryColor,
+                                              title: SizedBox(
+                                                width: 250,
+                                                child: Text(
+                                                  'Do you want really to delete \' $title \' ?',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text(
+                                                    'Cancel',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 17,
+                                                    ),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    deleteLink(id!);
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                      content: Center(
+                                                        child: Text(
+                                                          'Deleted Successfully',
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.redAccent,
+                                                      duration:
+                                                          Duration(seconds: 2),
+                                                      width: 190,
+                                                      elevation: 0,
+                                                      behavior: SnackBarBehavior
+                                                          .floating,
+                                                    ));
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text(
+                                                    'OK',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 17,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
-                                      backgroundColor: Colors.red,
-                                      icon: Icons.delete,
-                                      borderRadius: BorderRadius.circular(15),
+                                      padding: EdgeInsets.all(5),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                          Container(
+                                            height: 70,
+                                            width: 67,
+                                            decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.delete,
+                                                color: Colors.white,
+                                                size: 35,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    SlidableAction(
+                                    CustomSlidableAction(
+                                      padding: EdgeInsets.all(5),
+                                      child: Container(
+                                        height: 70,
+                                        width: 67,
+                                        decoration: BoxDecoration(
+                                            color: kSecondaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.edit,
+                                            color: Colors.white,
+                                            size: 35,
+                                          ),
+                                        ),
+                                      ),
                                       onPressed: (context) {
                                         titleController.text = title!;
                                         linkController.text = link!;
@@ -616,14 +714,22 @@ class _ProfileViewState extends State<ProfileView> {
                                                                         context)
                                                                     .showSnackBar(
                                                                         const SnackBar(
-                                                                  content: Text(
-                                                                    'Updated Successfully',
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            15,
-                                                                        fontWeight:
-                                                                            FontWeight.w500),
+                                                                  elevation: 0,
+                                                                  behavior:
+                                                                      SnackBarBehavior
+                                                                          .floating,
+                                                                  content:
+                                                                      Center(
+                                                                    child: Text(
+                                                                      'Updated Successfully',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                    ),
                                                                   ),
+                                                                  width: 190,
                                                                   backgroundColor:
                                                                       kLinksColor,
                                                                   duration: Duration(
@@ -651,50 +757,43 @@ class _ProfileViewState extends State<ProfileView> {
                                               );
                                             });
                                       },
-                                      backgroundColor: kSecondaryColor,
-                                      icon: Icons.edit,
-                                      borderRadius: BorderRadius.circular(15),
                                     ),
                                   ],
                                 ),
-                                child: Center(
-                                  child: Container(
-                                    height: 70,
-                                    margin:
-                                        EdgeInsetsDirectional.only(bottom: 20),
-                                    padding: EdgeInsetsDirectional.only(top: 6),
-                                    decoration: BoxDecoration(
-                                      color: kLinksColor,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '$title',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700,
-                                            ),
+                                child: Container(
+                                  height: 70,
+                                  padding: EdgeInsetsDirectional.only(top: 6),
+                                  decoration: BoxDecoration(
+                                    color: kLinksColor,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '$title',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700,
                                           ),
-                                          Text(
-                                            '$link',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                        ),
+                                        Text(
+                                          '$link',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500,
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ));
                           },
                           separatorBuilder: (context, index) {
                             return SizedBox(
-                              width: 30,
+                              height: 15,
                             );
                           },
                           itemCount: linkCount,

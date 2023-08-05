@@ -23,7 +23,6 @@ class _SearchViewState extends State<SearchView> {
   final _formKey = GlobalKey<FormState>();
   List<UserClass> names = [];
   int? followeeId;
-  Color buttonBacgroundColor = kSecondaryColor;
 
   List<dynamic>? followingList;
   bool? isFollowing = false;
@@ -32,7 +31,6 @@ class _SearchViewState extends State<SearchView> {
       final body = {
         'name': searchController.text,
       };
-
       searchLink(body).then((link) async {
         if (mounted) {
           setState(() {
@@ -46,6 +44,7 @@ class _SearchViewState extends State<SearchView> {
         ));
       });
     }
+    setState(() {});
   }
 
   Future<void> getFollowing() async {
@@ -70,12 +69,7 @@ class _SearchViewState extends State<SearchView> {
       'followee_id': followeeId.toString(),
     };
 
-    addUserCont(body).then((isfollowed) {
-      setState(() {
-        isFollowing = true;
-        buttonBacgroundColor = Colors.white;
-      });
-    }).catchError((err) {
+    addUserCont(body).catchError((err) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(err.toString()),
         backgroundColor: Colors.red,
@@ -126,9 +120,12 @@ class _SearchViewState extends State<SearchView> {
                   final linkCount = user.links!.length;
                   return ListTile(
                     onTap: () {
+                      followeeId = names[index].id;
+                      isFollowing = followingList!.contains(followeeId);
+                      setState(() {});
+
+                      print('listtile  $isFollowing');
                       setState(() {
-                        isFollowing = false;
-                        followeeId = names[index].id;
                         showModalBottomSheet(
                             clipBehavior: Clip.hardEdge,
                             isScrollControlled: true,
@@ -138,183 +135,201 @@ class _SearchViewState extends State<SearchView> {
                               top: Radius.circular(25.0),
                             )),
                             builder: (BuildContext context) {
-                              return SizedBox(
-                                height: 700,
-                                child: Column(
-                                  children: [
-                                    const Padding(
-                                      padding:
-                                          EdgeInsetsDirectional.only(top: 20.0),
-                                      child: Center(
-                                          child: Text(
-                                        'Name',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w700),
-                                      )),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsetsDirectional.only(
-                                        top: 35,
-                                        start: 35,
-                                        end: 35,
-                                      ),
-                                      height: 150,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: kPrimaryColor,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Row(children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 25.0),
-                                          child: Image.asset(
-                                            'assets/imgs/person.png',
-                                            height: 90,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsetsDirectional.only(
-                                              start: 20.0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                user.name!,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 22,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                              SizedBox(
-                                                width: 180,
-                                                child: Text(
-                                                  user.email!,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    EdgeInsetsDirectional.only(
-                                                        top: 15),
-                                                child: GestureDetector(
-                                                    onTap: () {
-                                                      addUser();
-                                                    },
-                                                    child: Container(
-                                                      height: 30,
-                                                      width: 82,
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              buttonBacgroundColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                      child: Center(
-                                                        child: Text(
-                                                          isFollowing!
-                                                              ? 'Following'
-                                                              : 'Follow',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  kPrimaryColor,
-                                                              fontSize: 17,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                        ),
-                                                      ),
-                                                    )),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ]),
-                                    ),
-                                    Expanded(
-                                      child: ListView.separated(
-                                        physics: BouncingScrollPhysics(),
+                              return StatefulBuilder(builder:
+                                  (BuildContext context, StateSetter setState) {
+                                return SizedBox(
+                                  height: 700,
+                                  child: Column(
+                                    children: [
+                                      const Padding(
                                         padding: EdgeInsetsDirectional.only(
-                                          start: 60,
-                                          end: 60,
-                                          top: 40,
+                                            top: 20.0),
+                                        child: Center(
+                                            child: Text(
+                                          'Name',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w700),
+                                        )),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsetsDirectional.only(
+                                          top: 35,
+                                          start: 35,
+                                          end: 35,
                                         ),
-                                        scrollDirection: Axis.vertical,
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            width: 90,
-                                            height: 70,
-                                            margin: EdgeInsetsDirectional.only(
-                                                bottom: 20),
-                                            padding: EdgeInsetsDirectional.only(
-                                                top: 6),
-                                            decoration: BoxDecoration(
-                                              color: kLinksColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
+                                        height: 150,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: kPrimaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Row(children: [
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .only(start: 25.0),
+                                            child: Image.asset(
+                                              'assets/imgs/person.png',
+                                              height: 90,
+                                              fit: BoxFit.cover,
                                             ),
-                                            child: Center(
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    user.links![index].title!,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsetsDirectional.only(
+                                                start: 20.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  width: 180,
+                                                  child: Text(
+                                                    user.name!,
                                                     style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
+                                                        color: Colors.white,
+                                                        fontSize: 22,
+                                                        fontWeight:
+                                                            FontWeight.w700),
                                                   ),
-                                                  SizedBox(
-                                                    width: 220,
-                                                    child: Center(
-                                                      child: Text(
-                                                        user.links![index]
-                                                            .link!,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
+                                                ),
+                                                SizedBox(
+                                                  width: 180,
+                                                  child: SizedBox(
+                                                    child: Text(
+                                                      user.email!,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 18,
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w400),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .only(top: 15),
+                                                  child: GestureDetector(
+                                                      onTap: isFollowing!
+                                                          ? null
+                                                          : () {
+                                                              addUser();
+                                                              isFollowing =
+                                                                  true;
+                                                              getFollowing();
+                                                              submitSearch();
+
+                                                              setState(() {});
+                                                            },
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 90,
+                                                        decoration: BoxDecoration(
+                                                            color: isFollowing!
+                                                                ? Colors.white
+                                                                : kSecondaryColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                        child: Center(
+                                                          child: Text(
+                                                            isFollowing!
+                                                                ? 'Following'
+                                                                : 'Follow',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    kPrimaryColor,
+                                                                fontSize: 17,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ),
+                                                        ),
+                                                      )),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ]),
+                                      ),
+                                      Expanded(
+                                        child: ListView.separated(
+                                          physics: BouncingScrollPhysics(),
+                                          padding: EdgeInsetsDirectional.only(
+                                            start: 60,
+                                            end: 60,
+                                            top: 40,
+                                          ),
+                                          scrollDirection: Axis.vertical,
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                              width: 90,
+                                              height: 70,
+                                              margin:
+                                                  EdgeInsetsDirectional.only(
+                                                      bottom: 20),
+                                              padding:
+                                                  EdgeInsetsDirectional.only(
+                                                      top: 6),
+                                              decoration: BoxDecoration(
+                                                color: kLinksColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              child: Center(
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      user.links![index].title!,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 220,
+                                                      child: Center(
+                                                        child: Text(
+                                                          user.links![index]
+                                                              .link!,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return SizedBox(
-                                            width: 30,
-                                          );
-                                        },
-                                        itemCount: linkCount,
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return SizedBox(
+                                              width: 30,
+                                            );
+                                          },
+                                          itemCount: linkCount,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
+                                    ],
+                                  ),
+                                );
+                              });
                             });
                       });
                     },

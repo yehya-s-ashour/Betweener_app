@@ -7,18 +7,11 @@ import 'package:tt9_betweener_challenge/models/user.dart';
 
 Future<void> addUserCont(Map<String, String> body) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-
   User user = userFromJson(prefs.getString('user')!);
   final response = await http.post(Uri.parse(addUserUrl),
       body: body, headers: {'Authorization': 'Bearer ${user.token}'});
   if (response.statusCode == 200) {
-    // final parsedJson = json.decode(response.body);
-    // return parsedJson['followee']['user'];
-
-    // return 'true';
-    // } else if (response.statusCode == 500) {
-    print('object');
-    //   return false;
+    print('Added');
   } else {
     throw Exception('Failed add user');
   }

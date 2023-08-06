@@ -141,12 +141,12 @@ class _SearchViewState extends State<SearchView> {
                                   height: 700,
                                   child: Column(
                                     children: [
-                                      const Padding(
+                                      Padding(
                                         padding: EdgeInsetsDirectional.only(
                                             top: 20.0),
                                         child: Center(
                                             child: Text(
-                                          'Name',
+                                          '${user.name!.toUpperCase()}',
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 22,
@@ -259,73 +259,100 @@ class _SearchViewState extends State<SearchView> {
                                           )
                                         ]),
                                       ),
-                                      Expanded(
-                                        child: ListView.separated(
-                                          physics: BouncingScrollPhysics(),
-                                          padding: EdgeInsetsDirectional.only(
-                                            start: 60,
-                                            end: 60,
-                                            top: 40,
-                                          ),
-                                          scrollDirection: Axis.vertical,
-                                          itemBuilder: (context, index) {
-                                            return Container(
-                                              width: 90,
-                                              height: 70,
-                                              margin:
-                                                  EdgeInsetsDirectional.only(
-                                                      bottom: 20),
+                                      user.links!.length == 0
+                                          ? Expanded(
+                                              child: ListView.separated(
+                                              physics: BouncingScrollPhysics(),
                                               padding:
                                                   EdgeInsetsDirectional.only(
-                                                      top: 6),
-                                              decoration: BoxDecoration(
-                                                color: kLinksColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
+                                                start: 60,
+                                                end: 60,
+                                                top: 40,
                                               ),
-                                              child: Center(
-                                                child: Column(
-                                                  children: [
-                                                    Text(
-                                                      user.links![index].title!,
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 220,
-                                                      child: Center(
-                                                        child: Text(
+                                              scrollDirection: Axis.vertical,
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  width: 90,
+                                                  height: 70,
+                                                  margin: EdgeInsetsDirectional
+                                                      .only(bottom: 20),
+                                                  padding: EdgeInsetsDirectional
+                                                      .only(top: 6),
+                                                  decoration: BoxDecoration(
+                                                    color: kLinksColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  child: Center(
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
                                                           user.links![index]
-                                                              .link!,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
+                                                              .title!,
                                                           style: TextStyle(
                                                             color: Colors.white,
-                                                            fontSize: 18,
+                                                            fontSize: 20,
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                                FontWeight.w700,
                                                           ),
                                                         ),
-                                                      ),
+                                                        SizedBox(
+                                                          width: 220,
+                                                          child: Center(
+                                                            child: Text(
+                                                              user.links![index]
+                                                                  .link!,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                );
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return SizedBox(
+                                                  width: 30,
+                                                );
+                                              },
+                                              itemCount: linkCount,
+                                            ))
+                                          : Container(
+                                              margin:
+                                                  EdgeInsetsDirectional.only(
+                                                      top: 120),
+                                              height: 70,
+                                              width: 280,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                color: Color.fromARGB(
+                                                    255, 217, 215, 215),
                                               ),
-                                            );
-                                          },
-                                          separatorBuilder: (context, index) {
-                                            return SizedBox(
-                                              width: 30,
-                                            );
-                                          },
-                                          itemCount: linkCount,
-                                        ),
-                                      ),
+                                              child: Center(
+                                                  child: Text(
+                                                ' ${user.name!.toUpperCase()} has No links!!',
+                                                style: TextStyle(
+                                                    letterSpacing: 2,
+                                                    fontSize: 22,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )),
+                                            ),
                                     ],
                                   ),
                                 );

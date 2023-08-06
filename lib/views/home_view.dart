@@ -72,7 +72,7 @@ class _HomeViewState extends State<HomeView> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Text(
-                      'Welcome ${snapshot.data?.user?.name}',
+                      'Welcome, ${snapshot.data?.user?.name!.toUpperCase()}',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 32,
@@ -185,11 +185,9 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     );
                   }
-                  if (snapshot.hasError) {
-                    return Text(snapshot.error.toString());
-                  }
+
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: Center(child: CircularProgressIndicator()),
                   );
                 },
               ),
